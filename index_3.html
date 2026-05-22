@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrewNest — Specialty Coffee Roasters</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f0d0b;
+    --surface: #1a1612;
+    --card: #221e19;
+    --accent: #c8873a;
+    --accent2: #e8b472;
+    --text: #f0ebe3;
+    --muted: #8a7d6e;
+    --border: #2e2820;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 1.2rem 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(15,13,11,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent2);
+    letter-spacing: 1px;
+  }
+  .logo span { color: var(--muted); font-style: italic; font-size: 0.85rem; display: block; margin-top: -4px; }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav ul a { color: var(--muted); text-decoration: none; font-size: 0.9rem; letter-spacing: 0.5px; transition: color 0.3s; }
+  nav ul a:hover { color: var(--accent2); }
+  .nav-cta {
+    background: var(--accent);
+    color: #fff;
+    padding: 0.5rem 1.3rem;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s;
+  }
+  .nav-cta:hover { background: var(--accent2); color: #1a1612; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 6rem 5% 4rem;
+    gap: 4rem;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(200,135,58,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+  .hero h1 em { color: var(--accent2); font-style: italic; }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.8s 0.45s ease both; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 0.85rem 2rem;
+    border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+  }
+  .btn-primary:hover { background: var(--accent2); color: #1a1612; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+    animation: fadeIn 1s 0.3s ease both;
+  }
+  .coffee-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .coffee-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .coffee-emoji { font-size: 4rem; margin-bottom: 1rem; display: block; }
+  .coffee-card h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .coffee-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tag {
+    background: rgba(200,135,58,0.1);
+    color: var(--accent2);
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    font-size: 0.78rem;
+    border: 1px solid rgba(200,135,58,0.2);
+  }
+  .stats-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--accent2); }
+  .stat-label { font-size: 0.78rem; color: var(--muted); }
+
+  /* PRODUCTS */
+  .section { padding: 5rem 5%; }
+  .section-header { text-align: center; margin-bottom: 3.5rem; }
+  .section-tag {
+    font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem; display: block;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+  }
+  .section-header h2 em { color: var(--accent2); font-style: italic; }
+  .section-header p { color: var(--muted); max-width: 500px; margin: 1rem auto 0; }
+
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .product-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .product-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .product-card:hover .product-img { transform: scale(1.05); }
+  .product-img {
+    font-size: 3rem; margin-bottom: 1rem; display: block;
+    transition: transform 0.3s;
+  }
+  .product-origin {
+    font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .product-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .product-card p { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.5rem; }
+  .product-footer { display: flex; justify-content: space-between; align-items: center; }
+  .price { font-size: 1.3rem; font-weight: 500; color: var(--accent2); }
+  .add-btn {
+    background: transparent; border: 1px solid var(--accent);
+    color: var(--accent); padding: 0.4rem 1rem;
+    font-size: 0.82rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.3s;
+  }
+  .add-btn:hover { background: var(--accent); color: #fff; }
+
+  /* ABOUT */
+  .about-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .about-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .about-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .about-box .icon { font-size: 2rem; margin-bottom: 0.7rem; display: block; }
+  .about-box h4 { font-family: 'Playfair Display', serif; margin-bottom: 0.4rem; }
+  .about-box p { font-size: 0.82rem; color: var(--muted); }
+  .about-box.featured {
+    background: linear-gradient(135deg, rgba(200,135,58,0.15), rgba(200,135,58,0.05));
+    border-color: rgba(200,135,58,0.3);
+    grid-column: span 2;
+  }
+  .about-text h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 1rem; }
+  .about-text h2 em { color: var(--accent2); font-style: italic; }
+  .about-text p { color: var(--muted); margin-bottom: 1rem; }
+
+  /* PROCESS */
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .step {
+    text-align: center; padding: 2rem 1rem;
+    background: var(--card); border: 1px solid var(--border);
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; color: rgba(200,135,58,0.15);
+    position: absolute; top: 1rem; right: 1rem;
+    line-height: 1;
+  }
+  .step-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .step h3 { font-family: 'Playfair Display', serif; margin-bottom: 0.5rem; }
+  .step p { color: var(--muted); font-size: 0.85rem; }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .testimonial-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 2rem;
+  }
+  .stars { color: var(--accent2); font-size: 1.1rem; margin-bottom: 1rem; letter-spacing: 2px; }
+  .testimonial-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; font-style: italic; }
+  .reviewer { display: flex; align-items: center; gap: 0.8rem; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  .reviewer-name { font-size: 0.9rem; font-weight: 500; }
+  .reviewer-loc { font-size: 0.78rem; color: var(--muted); }
+
+  /* CONTACT */
+  .contact-section { background: var(--surface); border-top: 1px solid var(--border); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-info h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 1rem; }
+  .contact-info h2 em { color: var(--accent2); font-style: italic; }
+  .contact-info p { color: var(--muted); margin-bottom: 2rem; }
+  .contact-details { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .contact-icon { font-size: 1.3rem; }
+  .contact-item h4 { font-size: 0.85rem; font-weight: 500; margin-bottom: 0.2rem; }
+  .contact-item p { color: var(--muted); font-size: 0.85rem; margin: 0; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  input, textarea, select {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 0.8rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.3s; width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+  textarea { resize: vertical; min-height: 120px; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 5%;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer p { color: var(--muted); font-size: 0.85rem; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--accent2); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    .hero, .about-inner, .contact-inner { grid-template-columns: 1fr; }
+    .products-grid, .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .hero-visual { display: none; }
+    nav ul { display: none; }
+  }
+  @media (max-width: 600px) {
+    .products-grid, .testimonials-grid, .process-steps { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">BrewNest <span>specialty roasters</span></div>
+  <ul>
+    <li><a href="#products">Our Coffees</a></li>
+    <li><a href="#about">Story</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#products" class="nav-cta">Shop Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">Single Origin · Small Batch · Freshly Roasted</span>
+    <h1>Coffee That Tells a <em>Story</em></h1>
+    <p>We source exceptional beans directly from farms across Ethiopia, Colombia, and Guatemala — roasted in small batches to preserve every nuance of flavour.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Explore Coffees</a>
+      <a href="#about" class="btn-outline">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="coffee-card">
+      <span class="coffee-emoji">☕</span>
+      <h3>Ethiopian Yirgacheffe</h3>
+      <p>Bright floral notes with hints of bergamot and dark chocolate. Our bestseller.</p>
+      <div class="tags">
+        <span class="tag">Light Roast</span>
+        <span class="tag">Single Origin</span>
+        <span class="tag">Fair Trade</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item"><div class="stat-num">2,200m</div><div class="stat-label">Altitude</div></div>
+        <div class="stat-item"><div class="stat-num">94°</div><div class="stat-label">Brew Temp</div></div>
+        <div class="stat-item"><div class="stat-num">⭐ 4.9</div><div class="stat-label">Rating</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div class="section-header">
+    <span class="section-tag">Our Collection</span>
+    <h2>Handpicked <em>Origins</em></h2>
+    <p>Each coffee reflects the terroir, farmers, and traditions of its homeland.</p>
+  </div>
+  <div class="products-grid">
+    <div class="product-card">
+      <span class="product-img">🇪🇹</span>
+      <div class="product-origin">Ethiopia · Yirgacheffe</div>
+      <h3>Morning Bloom</h3>
+      <p>Floral jasmine, bergamot, and a clean citrus finish. Perfect as a pour-over.</p>
+      <div class="product-footer">
+        <span class="price">$18.99</span>
+        <button class="add-btn">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <span class="product-img">🇨🇴</span>
+      <div class="product-origin">Colombia · Huila</div>
+      <h3>Velvet Peaks</h3>
+      <p>Brown sugar sweetness, stone fruit, and a silky caramel body. Crowd favourite.</p>
+      <div class="product-footer">
+        <span class="price">$17.50</span>
+        <button class="add-btn">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <span class="product-img">🇬🇹</span>
+      <div class="product-origin">Guatemala · Antigua</div>
+      <h3>Dark Ember</h3>
+      <p>Rich chocolate, toasted almond, and a hint of smokiness. For espresso lovers.</p>
+      <div class="product-footer">
+        <span class="price">$16.99</span>
+        <button class="add-btn">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about-section" id="about">
+  <div class="about-inner">
+    <div class="about-visual">
+      <div class="about-box featured">
+        <span class="icon">🌱</span>
+        <h4>Direct Trade Promise</h4>
+        <p>We pay farmers 40% above fair trade prices and visit every farm annually to build lasting relationships.</p>
+      </div>
+      <div class="about-box">
+        <span class="icon">🔥</span>
+        <h4>Fresh Roasted</h4>
+        <p>Roasted to order, shipped within 24 hours.</p>
+      </div>
+      <div class="about-box">
+        <span class="icon">🌍</span>
+        <h4>12 Origins</h4>
+        <p>Sourced from 4 continents, 12 distinct farms.</p>
+      </div>
+    </div>
+    <div class="about-text">
+      <span class="section-tag">Our Story</span>
+      <h2>Born from a <em>Passion</em> for Exceptional Coffee</h2>
+      <p>Founded in 2019 by two coffee obsessives who quit their corporate jobs to chase the world's most extraordinary beans. What started as a weekend hobby became a full-scale roastery.</p>
+      <p>Today, BrewNest sources from over 12 farms worldwide, maintaining direct relationships with every grower. We believe great coffee starts long before the roast — it starts at origin.</p>
+      <a href="#contact" class="btn-primary" style="display:inline-block; margin-top:1rem;">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+  <div class="section-header">
+    <span class="section-tag">From Farm to Cup</span>
+    <h2>Our <em>Process</em></h2>
+    <p>Every step is handled with obsessive attention to detail.</p>
+  </div>
+  <div class="process-steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <span class="step-icon">🌿</span>
+      <h3>Source</h3>
+      <p>We visit farms personally and select only the top 5% of each harvest.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <span class="step-icon">🚢</span>
+      <h3>Import</h3>
+      <p>Green beans are shipped in GrainPro bags to preserve freshness.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <span class="step-icon">🔥</span>
+      <h3>Roast</h3>
+      <p>Small-batch roasted on our Loring Kestrel to exact profiles.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <span class="step-icon">📦</span>
+      <h3>Deliver</h3>
+      <p>Packed and shipped within 24 hours of roasting. Freshness guaranteed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background: var(--surface); border-top:1px solid var(--border)">
+  <div class="section-header">
+    <span class="section-tag">Reviews</span>
+    <h2>What Our <em>Customers Say</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p>"Honestly the best coffee I've ever ordered online. The Ethiopian is absolutely incredible — floral and complex without being overwhelming."</p>
+      <div class="reviewer">
+        <div class="avatar">S</div>
+        <div><div class="reviewer-name">Sarah Mitchell</div><div class="reviewer-loc">Portland, OR</div></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p>"I've tried dozens of specialty roasters and BrewNest is consistently in my top three. The freshness is unmatched — you can taste the difference."</p>
+      <div class="reviewer">
+        <div class="avatar">J</div>
+        <div><div class="reviewer-name">James Ortega</div><div class="reviewer-loc">Austin, TX</div></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p>"Fast shipping, beautiful packaging, and the Colombian is my new daily driver. Worth every penny. I tell everyone about this place."</p>
+      <div class="reviewer">
+        <div class="avatar">A</div>
+        <div><div class="reviewer-name">Aisha Patel</div><div class="reviewer-loc">Chicago, IL</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <span class="section-tag">Get in Touch</span>
+      <h2>We'd Love to <em>Hear</em> from You</h2>
+      <p>Questions about an order, wholesale enquiries, or just want to talk coffee — we're here.</p>
+      <div class="contact-details">
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div><h4>Roastery</h4><p>142 Roast Lane, Portland, OR 97201</p></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📞</span>
+          <div><h4>Phone</h4><p>+1 (503) 892-4411</p></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <div><h4>Email</h4><p>hello@brewnest.co</p></div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🕐</span>
+          <div><h4>Hours</h4><p>Mon–Sat: 8am – 6pm PST</p></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="contact-form">
+        <div class="form-row">
+          <input type="text" placeholder="Your Name">
+          <input type="email" placeholder="Email Address">
+        </div>
+        <input type="text" placeholder="Subject">
+        <textarea placeholder="Your message..."></textarea>
+        <button class="btn-primary" style="border:none; cursor:pointer; text-align:center;">Send Message</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 BrewNest Specialty Roasters. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+    <a href="#">Shipping</a>
+    <a href="#">Instagram</a>
+  </div>
+</footer>
+
+</body>
+</html>
